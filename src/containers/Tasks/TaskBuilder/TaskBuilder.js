@@ -1,16 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as actionTypes from '../../../store/actions/index';
-// import axios from '../../../axios-tasks';
 import { Redirect } from 'react-router-dom';
 
 import Aux from '../../../hoc/aux';
 
 import { Form, Input, Button } from 'semantic-ui-react';
 import Loader from '../../../components/UI/Spinner/Spinner';
-
-// import Response from '../../../components/Response/Response';
-
 
 
 class TaskBuilder extends Component {
