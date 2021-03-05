@@ -1,2 +1,4 @@
 # semantic ui based theme (less)
 src/assets/semantic/*
+semantic
+node_modules
