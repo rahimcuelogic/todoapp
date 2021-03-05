@@ -48,7 +48,7 @@ export const auth = (userdata, type) => {
         };
         // console.log(authData);
 
-        const ApiKey = '';
+        const ApiKey = process.env.REACT_APP_FIREBASE_API;
         const baseUrl = 'https://identitytoolkit.googleapis.com/v1/accounts:';
         const endPoint = (type === 'signup') ? baseUrl + 'signUp?key=' + ApiKey : baseUrl + 'signInWithPassword?key=' + ApiKey;
         axios.post(endPoint, authData)
