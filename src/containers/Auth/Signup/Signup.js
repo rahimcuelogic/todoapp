@@ -4,11 +4,11 @@ import { Redirect } from 'react-router-dom';
 
 import * as actions from '../../../store/actions/index'
 
-import '../../../assets/semantic/semantic.min.css';
 import { Form, Input, Button } from 'semantic-ui-react';
 
 import Aux from '../../../hoc/aux';
 import Loader from '../../../components/UI/Spinner/Spinner';
+import ResponseMessage from '../../../components/UI/ResponseMessage/ResponseMessage';
 
 
 
@@ -19,6 +19,9 @@ class Signup extends Component {
             password: '',
             firstName: '',
             lastName: ''
+        },
+        errors: {
+            'EMAIL_EXISTS': 'This email is taken, please try with another email.',
         }
     }
 
@@ -101,7 +104,8 @@ class Signup extends Component {
                             onChange={this.passwordChangeHandler} 
                             value={this.state.user.password} />
                     </Form.Field>
-                    {this.props.loading ? <Loader /> : ''}
+                    { this.props.loading ? <Loader /> : '' }
+                    { this.props.isError ? <ResponseMessage color="red" message={this.state.errors[this.props.isError]} /> : '' }
                     <Button type='submit' primary >Submit</Button>
                     {this.props.isAuth ? <Redirect to="/" /> : ''}
                 </Form>
@@ -114,7 +118,8 @@ class Signup extends Component {
 const mapStateToProps = state => {
     return {
         isAuth: state.authReducer.token !== null,
-        loading: state.authReducer.loading
+        loading: state.authReducer.loading,
+        isError: state.authReducer.error
     };
 };
 

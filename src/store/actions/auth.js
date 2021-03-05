@@ -31,6 +31,16 @@ export const logout = () => {
     };
 };
 
+export const resetErrors = () => {
+    console.log('reset error');
+    return dispatch => {
+        return {
+            type: actionTypes.ERROR_RESET,
+
+        }
+    }
+};
+
 export const checkAuthTimeout = (expirationTime) => {
     return dispatch => {
         setTimeout( () => {
@@ -61,12 +71,11 @@ export const auth = (userdata, type) => {
                 dispatch(checkAuthTimeout(response.data.expiresIn));
             })
             .catch(err => {
-                const responseErrors = err.response.data.error.errors;
-                // const errors = [];
-                // responseErrors.map( error => {
-                //     return errors.push(error.message);
-                // });
+                const responseErrors = err.response.data.error.errors[0].message;
                 dispatch(authFail(responseErrors));
+                // setTimeout( () => {
+                //     dispatch(resetErrors());
+                // }, 3000);
             });
     };
 };

@@ -3,11 +3,16 @@ import * as actionTypes from '../actions/actionTypes';
 const initialState = {
     taskList: [],
     taskStatus: '',
-    user: []
+    user: [],
+    loading: false
 };
 
 const reducer = (state = initialState, action) => {
     switch (action.type) {
+        case actionTypes.START_ADD_TASK:
+            return {
+                ...state
+            }
         case actionTypes.SET_TASKS:
             return {
                 ...state,

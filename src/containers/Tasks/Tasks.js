@@ -19,32 +19,42 @@ class Tasks extends Component {
 
     componentDidMount = () => {
         console.log('componentDidMount');
+    };
+
+    componentWillMount = () => {
+        console.log('compoenenWill Mount');
+        if(!this.props.token){
+            this.props.onCheckToken();
+        }
+
         if(!this.props.taskList.length){
-            this.props.onInitTasks(this.props.token);
+            this.props.onInitTasks(this.props.token, this.props.userId);
             this.setState({ loading: true });
         }
     };
 
     deleteTaskHandler = (taskId) => {
-        console.log(taskId);
+        console.log('deleteTaskHandler', taskId);
     };
 
     render() {
         let authRedirect = null;
+
+        let allTasks = <Loader />
         if(this.props.token === null){
             authRedirect = <Redirect to="/" />
-        }
-        let allTasks = <Loader />
-        if(this.props.taskList.length){
-            allTasks = this.props.taskList.map(fetchedTask => (
-                <Task
-                    title={fetchedTask.title}
-                    description={fetchedTask.description}
-                    id={fetchedTask.id}
-                    key={fetchedTask.id}
-                />
-
-            ));
+        }else{
+            if(this.props.taskList.length){
+                allTasks = this.props.taskList.map(fetchedTask => (
+                    <Task
+                        {...fetchedTask}
+                        key={fetchedTask.id}
+                    />
+    
+                ));
+            }else{
+                allTasks = <p>No task found! Try adding one.</p>
+            }
         }
         return (
             <div>
@@ -66,7 +76,8 @@ const mapStateToProps = state => {
 };
 const mapDispatchToProps = dispatch => {
     return {
-        onInitTasks: (token) => dispatch(actionTypes.initTasks(token))
+        onInitTasks: (token, userId) => dispatch(actionTypes.initTasks(token, userId)),
+        onCheckToken: () => dispatch(actionTypes.authCheckState())
     }
 };
  

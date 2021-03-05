@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-// import Aux from '../../hoc/aux';
 import Toolbar from '../Navigation/Toolbar/Toolbar';
 
-import '../../assets/semantic/semantic.min.css';
 import { Container } from 'semantic-ui-react';
 
 class Layout extends Component {

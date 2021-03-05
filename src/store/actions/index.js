@@ -1,6 +1,7 @@
 export {
     addTask, 
-    initTasks
+    initTasks,
+    getTask
 } from './task';
 
 export {

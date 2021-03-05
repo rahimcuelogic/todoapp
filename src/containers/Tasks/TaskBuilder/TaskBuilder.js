@@ -6,8 +6,8 @@ import { Redirect } from 'react-router-dom';
 
 import Aux from '../../../hoc/aux';
 
-import '../../../assets/semantic/semantic.min.css';
 import { Form, Input, Button } from 'semantic-ui-react';
+import Loader from '../../../components/UI/Spinner/Spinner';
 
 import Response from '../../../components/Response/Response';
 
@@ -21,13 +21,11 @@ class TaskBuilder extends Component {
         },
         taskStatus: ''
     };
-    componentDidMount() {
-        // console.log(this.props);
-    }
 
     createTaskHandler = () => {
         const task = {
-            ...this.state.task
+            ...this.state.task,
+            userId: this.props.userId
         }
         this.props.onAddTasks(task, this.props.token);
         const updatedState = {
@@ -39,9 +37,7 @@ class TaskBuilder extends Component {
             },
             taskStatus: 'success'
         };
-        // console.log(updatedState);
         this.setState({ updatedState });
-        // console.log(this.state);
     };
 
     titleChangeHandler = (event) => {
@@ -99,6 +95,7 @@ class TaskBuilder extends Component {
                         onChange={this.descriptionChangeHandler} 
                         value={this.state.task.description} />
                 </Form.Field>
+                { this.props.loading ? <Loader /> : '' }
                 <Button type='submit' primary >Submit</Button>
             </Form>
             {taskStatus}
@@ -112,7 +109,8 @@ const mapStateToProps = state => {
     return {
         error: state.authReducer.error,
         loading: state.authReducer.loading,
-        token: state.authReducer.token
+        token: state.authReducer.token,
+        userId: state.authReducer.userId
     }
 };
 

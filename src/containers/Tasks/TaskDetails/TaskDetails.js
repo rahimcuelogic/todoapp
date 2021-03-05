@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import axios from 'axios';
+// import axios from 'axios';
+import * as actionTypes from '../../../store/actions/index'
 
 import Aux from '../../../hoc/aux';
 
@@ -13,6 +14,11 @@ class TaskDetails extends Component {
 
     componentDidMount = () => {
         console.log('TaskDetails');
+        const taskId = this.props.match.params.id;
+        console.log('taskId', taskId);
+        this.props.onGetTask(this.props.token);
+
+        /*
         axios.get('https://react-my-burger-492b4-default-rtdb.firebaseio.com/tasks/')
          .then( (response) => {
              console.log(response);
@@ -21,6 +27,7 @@ class TaskDetails extends Component {
          .catch( (err) => {
              console.log(err);
          });
+         */
     };
 
     render() { 
@@ -35,8 +42,16 @@ class TaskDetails extends Component {
 
 const mapStateToProps = state => {
     return {
+        taskList: state.taskReducer.taskList,
+        userId: state.authReducer.userId,
         token: state.authReducer.token
     }
 };
+const mapDispatchToProps = dispatch => {
+    return {
+        onGetTask: (token) => dispatch(actionTypes.getTask(token))
+    }
+};
+
  
-export default connect(mapStateToProps)(TaskDetails);
+export default connect(mapStateToProps, mapDispatchToProps)(TaskDetails);

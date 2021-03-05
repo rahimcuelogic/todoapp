@@ -1,3 +1,4 @@
+export const START_ADD_TASK = 'START_ADD_TASK';
 export const INIT_TASKS = 'INIT_TASKS';
 export const SET_TASKS = 'SET_TASKS';
 export const FETCH_TASKS = 'FETCH_TASKS';
@@ -11,3 +12,5 @@ export const AUTH_START = 'AUTH_START';
 export const AUTH_SUCCESS = 'AUTH_SUCCESS';
 export const AUTH_FAIL = 'AUTH_FAIL';
 export const AUTH_LOGOUT = 'AUTH_LOGOUT';
+
+export const ERROR_RESET = 'ERROR_RESET';
