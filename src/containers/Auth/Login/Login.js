@@ -7,13 +7,30 @@ import * as actions from '../../../store/actions/index'
 import '../../../assets/semantic/semantic.min.css';
 import { Form, Input, Button } from 'semantic-ui-react';
 import Aux from '../../../hoc/aux';
+import Loader from '../../../components/UI/Spinner/Spinner';
 
 
 
 class Login extends Component {
     state = {
         email: '',
-        password: ''
+        password: '',
+        errors: {
+            'INVALID_PASSWORD': 'Please enter correct password.',
+            'EMAIL_NOT_FOUND' : 'Entered email is invalid, try Signining up.'
+        }
+    }
+
+    componentDidMount = () => {
+        // console.log(' ------------- did mount -------------');
+        // console.log(this.props.responseMessage);
+        // console.log(' ------------- did mount -------------');
+    }
+
+    componentDidUpdate = () => {
+        // console.log(' ------------- UPDATE -------------');
+        // console.log(this.props.responseMessage);
+        // console.log(' ------------- UPDATE -------------');
     }
 
     submitHandler = (event) => {
@@ -31,6 +48,15 @@ class Login extends Component {
     };
 
     render() { 
+        let responseMessage = '';
+        // if(this.props.responseMessage.length){
+        //     let keys = 1;
+        //     responseMessage = this.props.responseMessage.map( respMessage => {
+        //         ++keys;
+        //         return <p key={keys}>{this.state.errors[respMessage.message]}</p>
+        //     });
+
+        // }
         return (
             <Aux>
                 <h1>Login to continue</h1>
@@ -53,9 +79,11 @@ class Login extends Component {
                             onChange={this.passwordChangeHandler} 
                             value={this.state.password} />
                     </Form.Field>
+                    {this.props.loading ? <Loader /> : ''}
                     <Button type='submit' primary >Submit</Button>
                     {this.props.isAuth ? <Redirect to="/" /> : ''}
                 </Form>
+                {responseMessage}
             </Aux>
         );
     }
@@ -63,7 +91,9 @@ class Login extends Component {
 
 const mapStateToProps = state => {
     return {
-        isAuth: state.authReducer.token !== null
+        isAuth: state.authReducer.token !== null,
+        // responseMessage: state.authReducer.error
+        loading: state.authReducer.loading
     };
 };
 

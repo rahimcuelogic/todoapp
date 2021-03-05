@@ -5,6 +5,7 @@ import * as actionTypes from '../../store/actions/index'
 import { Redirect } from 'react-router-dom';
 
 import Task from './Task/Task';
+import Loader from '../../components/UI/Spinner/Spinner';
 
 // import '../../assets/semantic/semantic.min.css';
 // import { Dimmer, Loader, Image, Segment } from 'semantic-ui-react';
@@ -33,7 +34,7 @@ class Tasks extends Component {
         if(this.props.token === null){
             authRedirect = <Redirect to="/" />
         }
-        let allTasks = <p>No task found! Try adding one.</p>
+        let allTasks = <Loader />
         if(this.props.taskList.length){
             allTasks = this.props.taskList.map(fetchedTask => (
                 <Task

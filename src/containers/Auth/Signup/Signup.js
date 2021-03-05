@@ -8,6 +8,7 @@ import '../../../assets/semantic/semantic.min.css';
 import { Form, Input, Button } from 'semantic-ui-react';
 
 import Aux from '../../../hoc/aux';
+import Loader from '../../../components/UI/Spinner/Spinner';
 
 
 
@@ -100,6 +101,7 @@ class Signup extends Component {
                             onChange={this.passwordChangeHandler} 
                             value={this.state.user.password} />
                     </Form.Field>
+                    {this.props.loading ? <Loader /> : ''}
                     <Button type='submit' primary >Submit</Button>
                     {this.props.isAuth ? <Redirect to="/" /> : ''}
                 </Form>
@@ -111,7 +113,8 @@ class Signup extends Component {
 
 const mapStateToProps = state => {
     return {
-        isAuth: state.authReducer.token !== null
+        isAuth: state.authReducer.token !== null,
+        loading: state.authReducer.loading
     };
 };
 

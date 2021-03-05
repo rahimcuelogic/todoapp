@@ -46,7 +46,6 @@ export const auth = (userdata, type) => {
             ...userdata,
             returnSecureToken: true
         };
-        // console.log(authData);
 
         const ApiKey = process.env.REACT_APP_FIREBASE_API;
         const baseUrl = 'https://identitytoolkit.googleapis.com/v1/accounts:';
@@ -62,7 +61,12 @@ export const auth = (userdata, type) => {
                 dispatch(checkAuthTimeout(response.data.expiresIn));
             })
             .catch(err => {
-                dispatch(authFail(err.response.data.error));
+                const responseErrors = err.response.data.error.errors;
+                // const errors = [];
+                // responseErrors.map( error => {
+                //     return errors.push(error.message);
+                // });
+                dispatch(authFail(responseErrors));
             });
     };
 };

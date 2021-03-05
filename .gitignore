@@ -2,3 +2,4 @@
 src/assets/semantic/*
 semantic
 node_modules
+.env
