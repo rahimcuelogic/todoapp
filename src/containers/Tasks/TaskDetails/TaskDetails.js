@@ -44,7 +44,7 @@ const mapStateToProps = state => {
     return {
         taskList: state.taskReducer.taskList,
         userId: state.authReducer.userId,
-        token: state.authReducer.token
+        token: state.authReducer.token,
     }
 };
 const mapDispatchToProps = dispatch => {

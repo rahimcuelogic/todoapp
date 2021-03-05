@@ -1,14 +1,10 @@
 import React, { Component } from 'react';
-// import axios from '../../axios-tasks';
 import { connect } from 'react-redux';
 import * as actionTypes from '../../store/actions/index'
 import { Redirect } from 'react-router-dom';
 
 import Task from './Task/Task';
 import Loader from '../../components/UI/Spinner/Spinner';
-
-// import '../../assets/semantic/semantic.min.css';
-// import { Dimmer, Loader, Image, Segment } from 'semantic-ui-react';
 
 
 class Tasks extends Component {
@@ -18,19 +14,18 @@ class Tasks extends Component {
     };
 
     componentDidMount = () => {
-        console.log('componentDidMount');
+        if(!this.props.token){
+            this.props.onCheckToken();
+        }else{
+            if(true){
+                this.props.onInitTasks(this.props.token, this.props.userId);
+                this.setState({ loading: true });
+            }
+        }
     };
 
     componentWillMount = () => {
-        console.log('compoenenWill Mount');
-        if(!this.props.token){
-            this.props.onCheckToken();
-        }
-
-        if(!this.props.taskList.length){
-            this.props.onInitTasks(this.props.token, this.props.userId);
-            this.setState({ loading: true });
-        }
+        
     };
 
     deleteTaskHandler = (taskId) => {

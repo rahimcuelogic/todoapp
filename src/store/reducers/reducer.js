@@ -2,27 +2,30 @@ import * as actionTypes from '../actions/actionTypes';
 
 const initialState = {
     taskList: [],
-    taskStatus: '',
     user: [],
-    loading: false
+    loading: false,
+    taskStatus: ''
 };
 
 const reducer = (state = initialState, action) => {
     switch (action.type) {
         case actionTypes.START_ADD_TASK:
             return {
-                ...state
+                ...state,
+                loading: action.loading,
+                taskStatus: action.taskStatus
             }
         case actionTypes.SET_TASKS:
             return {
                 ...state,
                 taskList: action.taskList,
-                // taskStatus: action.taskStatus
+                loading: action.loading,
+                taskStatus: action.taskStatus
             };
         case actionTypes.FETCH_TASKS:
             return {
                 ...state,
-                taskList: action.tasks
+                taskList: action.tasks,
             };
         case actionTypes.CHECK_TASKS:
             return state;

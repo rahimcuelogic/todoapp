@@ -9,7 +9,7 @@ import Aux from '../../../hoc/aux';
 import { Form, Input, Button } from 'semantic-ui-react';
 import Loader from '../../../components/UI/Spinner/Spinner';
 
-import Response from '../../../components/Response/Response';
+// import Response from '../../../components/Response/Response';
 
 
 
@@ -19,7 +19,6 @@ class TaskBuilder extends Component {
             title: '',
             description: ''
         },
-        taskStatus: ''
     };
 
     createTaskHandler = () => {
@@ -35,7 +34,6 @@ class TaskBuilder extends Component {
                 title: '',
                 description: '',
             },
-            taskStatus: 'success'
         };
         this.setState({ updatedState });
     };
@@ -58,21 +56,14 @@ class TaskBuilder extends Component {
 
     render() {
         let taskStatus = '';
-        if(this.state.taskStatus === 'success'){
-            taskStatus = <Response
-                type="info"
-                message="Task added successfully."
-            />
-        }
-        if(this.state.taskStatus === 'failed'){
-            taskStatus = <Response
-                type="failed"
-                message="Please try again later."
-            />
-        }
+
         let authRedirect = null;
         if(this.props.token === null){
             authRedirect = <Redirect to="/" />
+        }
+
+        if(this.props.taskStatus === 'added' && !this.props.loading){
+            authRedirect = <Redirect to="/todos/" />
         }
         return (
           <Aux>
@@ -108,9 +99,10 @@ class TaskBuilder extends Component {
 const mapStateToProps = state => {
     return {
         error: state.authReducer.error,
-        loading: state.authReducer.loading,
+        loading: state.taskReducer.loading,
+        taskStatus: state.taskReducer.taskStatus,
         token: state.authReducer.token,
-        userId: state.authReducer.userId
+        userId: state.authReducer.userId,
     }
 };
 

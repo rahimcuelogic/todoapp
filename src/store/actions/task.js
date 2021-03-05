@@ -1,15 +1,16 @@
 import * as actionTypes from './actionTypes';
 import axios from '../../axios-tasks';
 
-export const setTasks = (tasks) => {
+export const setTasks = (tasks, taskStatus) => {
     return {
         type: actionTypes.SET_TASKS,
         taskList: tasks,
-        loading: false
+        loading: false,
+        taskStatus: taskStatus
     };
 };
 
-export const initTasks = (token, userId) => {
+export const initTasks = (token, userId, taskStatus = '') => {
     return dispatch => {
         axios.get('tasks.json?auth=' + token)
          .then( (response) => {
@@ -22,7 +23,7 @@ export const initTasks = (token, userId) => {
                     });
                 }
             }
-            dispatch(setTasks(allTasks));
+            dispatch(setTasks(allTasks, taskStatus));
         })
         .catch( (err) => {
             console.log(err);
@@ -35,7 +36,7 @@ export const sendTask = (task, token) => {
     return dispatch => {
         axios.post(createTaskUrl, task)
             .then( (response) => {
-                dispatch(initTasks(token, task.userId));
+                dispatch(initTasks(token, task.userId, 'added'));
             })
             .catch( (err) => {
                 console.log(err);
@@ -46,13 +47,13 @@ export const sendTask = (task, token) => {
 export const startAddTask = () => {
     return {
         type: actionTypes.START_ADD_TASK,
-        loading: false
+        loading: true,
+        taskStatus: 'pending'
     };
 }
 
 export const addTask = (task, token) => {
     return dispatch => {
-        console.log('dispatch-----');
         dispatch(startAddTask());
         dispatch(sendTask(task, token));
     };
