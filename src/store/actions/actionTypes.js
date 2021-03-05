@@ -7,6 +7,7 @@ export const CHECK_TASKS = 'CHECK_TASKS';
 export const ADD_TASK = 'ADD_TASK';
 export const UPDATE_TASK = 'UPDATE_TASK';
 export const REMOVE_TASK = 'REMOVE_TASK';
+export const SET_TASK_DETAILS = 'SET_TASK_DETAILS';
 
 export const AUTH_START = 'AUTH_START';
 export const AUTH_SUCCESS = 'AUTH_SUCCESS';

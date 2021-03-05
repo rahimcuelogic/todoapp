@@ -66,14 +66,31 @@ export const deleteTask = (task) => {
     }
 };
 
-export const getTask = (token) => {
+export const setTaskDetails = (taskDetails) => {
+    return {
+        type: actionTypes.SET_TASK_DETAILS,
+        taskDetails: taskDetails
+    }
+};
+
+export const getTask = (token, taskId) => {
     return dispatch => {
         axios.get('tasks.json?auth=' + token)
-         .then( (response) => {
+        .then( (response) => {
 
-         })
-         .catch( (err) => {
-             console.log(err);
-         });
+            const taskDetails = [];
+            for (let key in response.data){
+                if(taskId === key){
+                    taskDetails.push({
+                        ...response.data[key],
+                        id: key
+                    });
+                }
+            }
+            dispatch(setTaskDetails(taskDetails[0]));
+        })
+        .catch( (err) => {
+            console.log(err);
+        });
     };
 };

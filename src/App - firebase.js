@@ -17,6 +17,7 @@ import Tasks from './containers/Tasks/Tasks';
 import Login from './containers/Auth/Login/Login';
 import Signup from './containers/Auth/Signup/Signup';
 
+
 const firebaseApp = firebase.initializeApp(firebaseConfig);
 
 const firebaseAppAuth = firebaseApp.auth();

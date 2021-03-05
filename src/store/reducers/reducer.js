@@ -4,11 +4,18 @@ const initialState = {
     taskList: [],
     user: [],
     loading: false,
-    taskStatus: ''
+    taskStatus: '',
+    taskDetails: {}
 };
 
 const reducer = (state = initialState, action) => {
     switch (action.type) {
+        case actionTypes.SET_TASK_DETAILS:
+            return {
+                ...state,
+                loading: false,
+                taskDetails: action.taskDetails
+            }
         case actionTypes.START_ADD_TASK:
             return {
                 ...state,
