@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as actionTypes from '../../../store/actions/index';
 import { Redirect } from 'react-router-dom';
+import firebase from 'firebase';
+
 
 import Aux from '../../../hoc/aux';
 
@@ -22,16 +24,13 @@ class TaskBuilder extends Component {
             ...this.state.task,
             userId: this.props.userId
         }
-        this.props.onAddTasks(task, this.props.token);
-        const updatedState = {
-            ...this.state,
-            task: {
-                ...this.state.task,
-                title: '',
-                description: '',
-            },
-        };
-        this.setState({ updatedState });
+
+        // this.props.onAddTasks(task);
+        const db = firebase.firestore();
+        db.settings({
+            timestampsInSnapshots: true
+        });
+        const userRef = db.collection("tasks").add();
     };
 
     updateInputHandler = (event) => {
@@ -98,7 +97,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        onAddTasks: (task, token) => dispatch(actionTypes.addTask(task, token)),
+        onAddTasks: (task) => dispatch(actionTypes.addTask(task)),
     }
 };
  

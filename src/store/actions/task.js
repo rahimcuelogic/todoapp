@@ -1,4 +1,5 @@
 import * as actionTypes from './actionTypes';
+import firebase from 'firebase';
 import axios from '../../axios-tasks';
 
 export const setTasks = (tasks, taskStatus) => {
@@ -31,16 +32,23 @@ export const initTasks = (token, userId, taskStatus = '') => {
     };
 };
 
-export const sendTask = (task, token) => {
-    const createTaskUrl = 'https://react-my-burger-492b4-default-rtdb.firebaseio.com/tasks.json?auth=' + token;
+export const sendTask = (task) => {
     return dispatch => {
+        const db = firebase.firestore();
+        db.settings({
+            timestampsInSnapshots: true
+        });
+        const userRef = db.collection("tasks").add();
+        /*
+        const createTaskUrl = 'https://react-my-burger-492b4-default-rtdb.firebaseio.com/tasks.json?auth=';
         axios.post(createTaskUrl, task)
             .then( (response) => {
-                dispatch(initTasks(token, task.userId, 'added'));
+                dispatch(initTasks('', task.userId, 'added'));
             })
             .catch( (err) => {
                 console.log(err);
         });
+        */
     };
 }
 
@@ -52,10 +60,10 @@ export const startAddTask = () => {
     };
 }
 
-export const addTask = (task, token) => {
+export const addTask = (task) => {
     return dispatch => {
         dispatch(startAddTask());
-        dispatch(sendTask(task, token));
+        dispatch(sendTask(task));
     };
 };
 

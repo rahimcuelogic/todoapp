@@ -8,10 +8,11 @@ export const authStart = () => {
     };
 };
 
-export const authSuccess = (userId) => {
+export const authSuccess = (userId, userName) => {
     return {
         type: actionTypes.AUTH_SUCCESS,
         userId: userId,
+        userName: userName,
     };
 };
 
@@ -60,6 +61,7 @@ export const authLogin = userdata => {
     return dispatch => {
         firebase.auth().signInWithEmailAndPassword(userdata.email, userdata.password)
             .then((userCredential) => {
+                console.log(userCredential);
                 localStorage.setItem('userId', userCredential.user.uid);
                 dispatch(authSuccess(userCredential.user.uid));
             })
@@ -73,8 +75,16 @@ export const authSignup = userdata => {
     return dispatch => {
         firebase.auth().createUserWithEmailAndPassword(userdata.email, userdata.password)
             .then((userCredential) => {
-                dispatch(authSuccess(userCredential.user.uid));
+                const db = firebase.firestore();
+                const userDetails = {
+                    userId: userCredential.user.uid,
+                    firstName: userdata.firstName,
+                    lastName: userdata.lastName,
+                };
+                const userRef = db.collection("users").add(userDetails);
+                dispatch(authSuccess(userCredential.user.uid, userdata.firstName));
                 localStorage.setItem('userId', userCredential.user.uid);
+                localStorage.setItem('userName', userdata.firstName);
             })
             .catch((error) => {
                 dispatch(authFail(error.message));
@@ -149,8 +159,9 @@ export const authCheckState = () => {
             dispatch(logout());
         }else{
             firebase.auth().onAuthStateChanged(function(user) {
+                const userName = localStorage.getItem('userName');
                 if (user) {
-                    dispatch(authSuccess(user.uid));
+                    dispatch(authSuccess(user.uid, userName));
                 } else {
                     dispatch(logout());
                 }
