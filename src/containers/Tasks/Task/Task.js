@@ -9,7 +9,7 @@ const task = (props) => {
         <Card>
             <Card.Content>
                 <Card.Header>{props.title}</Card.Header>
-                <Card.Description>{props.description}</Card.Description>
+                <Card.Description>{props.content}</Card.Description>
             </Card.Content>
             <Card.Content extra>
                 

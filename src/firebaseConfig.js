@@ -1,12 +1,18 @@
+import firebase from 'firebase/app';
+import 'firebase/firestore';
+
 const config = {
-    apiKey: "AIzaSyBYzJ7e7dwpE8rseVc0jtLMlRWkXN2ZXcc",
-    authDomain: "react-my-burger-492b4.firebaseapp.com",
-    databaseURL: "https://react-my-burger-492b4-default-rtdb.firebaseio.com",
-    projectId: "react-my-burger-492b4",
-    storageBucket: "react-my-burger-492b4.appspot.com",
-    messagingSenderId: "635939175881",
-    appId: "1:635939175881:web:36f162e8438715cf407c18",
-    measurementId: "G-3XY0Q3EMGN"
+    apiKey: process.env.REACT_APP_FIRESTORE_API,
+    authDomain: process.env.REACT_APP_AUTH_DOMAIN,
+    databaseURL: process.env.REACT_APP_DATABASE_URL,
+    projectId: process.env.REACT_APP_PROJECT_ID,
+    storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
+    messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
+    appId: process.env.REACT_APP_APP_ID,
+    measurementId: process.env.REACT_APP_MEASUREMENT_ID
   };
   
-export default config;
+
+firebase.initializeApp(config);
+
+export default firebase;

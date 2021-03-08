@@ -11,7 +11,7 @@ import * as actions from './store/actions';
 
 import Layout from './components/Layout/Layout';
 import TaskBuilder from './containers/Tasks/TaskBuilder/TaskBuilder';
-import Tasks from './containers/Tasks/Tasks';
+import Tasks from './containers/Tasks/NewTasks';
 import Login from './containers/Auth/Login/Login';
 import Signup from './containers/Auth/Signup/Signup';
 import Logout from './containers/Auth/Logout/Logout';
