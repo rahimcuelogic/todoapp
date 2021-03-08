@@ -38,12 +38,8 @@ class Login extends Component {
 
     };
 
-    emailChangeHandler = (event) => {
-        this.setState({ email: event.target.value });
-    };
-
-    passwordChangeHandler = (event) => {
-        this.setState({ password: event.target.value });
+    updateInputHandler = (event) => {
+        this.setState({ [event.target.name]: event.target.value });
     };
 
     render() {
@@ -57,7 +53,8 @@ class Login extends Component {
                             label="Email" 
                             placeholder='Enter email' 
                             type="email" 
-                            onChange={this.emailChangeHandler} 
+                            name="email"
+                            onChange={this.updateInputHandler} 
                             required
                             value={this.state.email} />
                     </Form.Field>
@@ -66,12 +63,13 @@ class Login extends Component {
                             label="Password" 
                             placeholder='Enter password' 
                             type="password"
+                            name="password"
                             required
-                            onChange={this.passwordChangeHandler} 
+                            onChange={this.updateInputHandler} 
                             value={this.state.password} />
                     </Form.Field>
                     { this.props.loading ? <Loader /> : '' }
-                    { this.props.isError ? <ResponseMessage color="red" message={this.state.errors[this.props.isError]} /> : '' }
+                    { this.props.isError ? <ResponseMessage color="red" message={this.props.isError} /> : '' }
                     <Button type='submit' primary >Submit</Button>
                 </Form>
             </Aux>

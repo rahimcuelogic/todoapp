@@ -30,36 +30,12 @@ class Signup extends Component {
         this.props.onAuth(this.state.user, 'signup');
     };
 
-    firstNameChangeHandler = (event) => {
-        const updatedName = {
+    updateInputHandler = (event) => {
+        const updatedUser = {
             ...this.state.user,
-            firstName: event.target.value
+            [event.target.name]: event.target.value
         };
-        this.setState({ user: updatedName });
-    };
-
-    lastNameChangeHandler = (event) => {
-        const updatedLastName = {
-            ...this.state.user,
-            lastName: event.target.value
-        };
-        this.setState({ user: updatedLastName });
-    };
-
-    emailChangeHandler = (event) => {
-        const updatedEmail = {
-            ...this.state.user,
-            email: event.target.value
-        };
-        this.setState({ user: updatedEmail });
-    };
-
-    passwordChangeHandler = (event) => {
-        const updatedPassword = {
-            ...this.state.user,
-            password: event.target.value
-        };
-        this.setState({ user: updatedPassword });
+        this.setState({ user: updatedUser });
     };
 
     render() { 
@@ -72,7 +48,8 @@ class Signup extends Component {
                             label="First Name" 
                             placeholder='Enter first name' 
                             type="text" 
-                            onChange={this.firstNameChangeHandler} 
+                            name="firstName"
+                            onChange={this.updateInputHandler} 
                             required
                             value={this.state.user.firstName} />
                     </Form.Field>
@@ -81,7 +58,8 @@ class Signup extends Component {
                             label="Last Name" 
                             placeholder='Enter last name' 
                             type="text" 
-                            onChange={this.lastNameChangeHandler} 
+                            name="lastName"
+                            onChange={this.updateInputHandler} 
                             required
                             value={this.state.user.lastName} />
                     </Form.Field>
@@ -90,7 +68,8 @@ class Signup extends Component {
                             label="Email" 
                             placeholder='Enter email' 
                             type="email" 
-                            onChange={this.emailChangeHandler} 
+                            name="email"
+                            onChange={this.updateInputHandler} 
                             required
                             value={this.state.user.email} />
                     </Form.Field>
@@ -99,8 +78,9 @@ class Signup extends Component {
                             label="Password" 
                             placeholder='Enter password' 
                             type="password"
+                            name="password"
                             required
-                            onChange={this.passwordChangeHandler} 
+                            onChange={this.updateInputHandler} 
                             value={this.state.user.password} />
                     </Form.Field>
                     { this.props.loading ? <Loader /> : '' }

@@ -34,20 +34,12 @@ class TaskBuilder extends Component {
         this.setState({ updatedState });
     };
 
-    titleChangeHandler = (event) => {
+    updateInputHandler = (event) => {
         const updatedTask = {
             ...this.state.task,
-            title: event.target.value
+            [event.target.name]: event.target.value
         };
         this.setState({ task: updatedTask });
-    };
-
-    descriptionChangeHandler = (event) => {
-        const updatedDescription = {
-            ...this.state.task,
-            description: event.target.value
-        };
-        this.setState({ task: updatedDescription });
     };
 
     render() {
@@ -71,7 +63,8 @@ class TaskBuilder extends Component {
                         label="Title" 
                         placeholder='Add title' 
                         type="text" 
-                        onChange={this.titleChangeHandler} 
+                        name="title"
+                        onChange={this.updateInputHandler} 
                         value={this.state.task.title} />
                 </Form.Field>
                 <Form.Field>
@@ -79,7 +72,8 @@ class TaskBuilder extends Component {
                         label="Description" 
                         placeholder='Add Description' 
                         type="text"
-                        onChange={this.descriptionChangeHandler} 
+                        name="description"
+                        onChange={this.updateInputHandler   } 
                         value={this.state.task.description} />
                 </Form.Field>
                 { this.props.loading ? <Loader /> : '' }
@@ -97,7 +91,7 @@ const mapStateToProps = state => {
         error: state.authReducer.error,
         loading: state.taskReducer.loading,
         taskStatus: state.taskReducer.taskStatus,
-        token: state.authReducer.token,
+        token: state.authReducer.userId,
         userId: state.authReducer.userId,
     }
 };
