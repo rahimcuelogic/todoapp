@@ -81,7 +81,7 @@ class Login extends Component {
 
 const mapStateToProps = state => {
     return {
-        isAuth: state.authReducer.token !== null,
+        isAuth: state.authReducer.userId !== null,
         isError: state.authReducer.error,
         loading: state.authReducer.loading
     };

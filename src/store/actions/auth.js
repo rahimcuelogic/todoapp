@@ -1,5 +1,6 @@
 import * as actionTypes from './actionTypes';
 import axios from 'axios';
+import firebase from 'firebase';
 
 export const authStart = () => {
     return {
@@ -7,10 +8,9 @@ export const authStart = () => {
     };
 };
 
-export const authSuccess = (token, userId) => {
+export const authSuccess = (userId) => {
     return {
         type: actionTypes.AUTH_SUCCESS,
-        idToken: token,
         userId: userId,
     };
 };
@@ -22,17 +22,24 @@ export const authFail = (error) => {
     };
 };
 
-export const logout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('expirationDate');
-    localStorage.removeItem('userId');
+const logoutUser = () => {
     return {
         type: actionTypes.AUTH_LOGOUT
     };
+}
+
+export const logout = () => {
+    return dispatch => {
+        firebase.auth().signOut().then(() => {
+            localStorage.removeItem('userId');
+            dispatch(logoutUser());
+        }, function (error) {
+            console.log(' Error logging out ');
+        });
+    }
 };
 
 export const resetErrors = () => {
-    console.log('reset error');
     return dispatch => {
         return {
             type: actionTypes.ERROR_RESET,
@@ -49,13 +56,71 @@ export const checkAuthTimeout = (expirationTime) => {
     }
 };
 
+export const authLogin = userdata => {
+    return dispatch => {
+        firebase.auth().signInWithEmailAndPassword(userdata.email, userdata.password)
+            .then((userCredential) => {
+                localStorage.setItem('userId', userCredential.user.uid);
+                dispatch(authSuccess(userCredential.user.uid));
+            })
+            .catch((error) => {
+                dispatch(authFail(error.message));
+            });
+    }
+}
+
+export const authSignup = userdata => {
+    return dispatch => {
+        firebase.auth().createUserWithEmailAndPassword(userdata.email, userdata.password)
+            .then((userCredential) => {
+                dispatch(authSuccess(userCredential.user.uid));
+                localStorage.setItem('userId', userCredential.user.uid);
+            })
+            .catch((error) => {
+                dispatch(authFail(error.message));
+            });
+    }
+}
+
 export const auth = (userdata, type) => {
+    
+        return dispatch => {
+            dispatch(authStart());
+            if(type === 'signup'){
+                dispatch(authSignup(userdata));
+            }else{
+                dispatch(authLogin(userdata));
+            }
+            /*
+            firebase.auth().createUserWithEmailAndPassword(userdata.email, userdata.password)
+            .then((userCredential) => {
+                console.log(userCredential);
+                // const expirationDate = new Date(new Date().getTime() + response.data.expiresIn * 1000);
+
+                // localStorage.setItem('token', response.data.idToken);
+                // localStorage.setItem('expirationDate', expirationDate);
+                // localStorage.setItem('userId', response.data.localId);
+                
+                // dispatch(authSuccess(response.data.idToken, response.data.localId));
+                // dispatch(checkAuthTimeout(response.data.expiresIn));
+            })
+            .catch((err) => {
+                console.log(err);
+                const responseErrors = err.response.data.error.errors[0].message;
+                dispatch(authFail(responseErrors));
+            });
+            */
+        };
+}
+
+export const oldAuth = (userdata, type) => {
     return dispatch => {
         dispatch(authStart());
         const authData = {
             ...userdata,
             returnSecureToken: true
         };
+        console.log('old auth');
 
         const ApiKey = process.env.REACT_APP_FIREBASE_API;
         const baseUrl = 'https://identitytoolkit.googleapis.com/v1/accounts:';
@@ -73,27 +138,23 @@ export const auth = (userdata, type) => {
             .catch(err => {
                 const responseErrors = err.response.data.error.errors[0].message;
                 dispatch(authFail(responseErrors));
-                // setTimeout( () => {
-                //     dispatch(resetErrors());
-                // }, 3000);
             });
     };
 };
 
 export const authCheckState = () => {
     return dispatch => {
-        const token = localStorage.getItem('token');
-        if(!token){
+        const userId = localStorage.getItem('userId');
+        if(!userId){
             dispatch(logout());
         }else{
-            const expirationDate = new Date(localStorage.getItem('expirationDate'));
-            if(expirationDate > new Date()){
-                const userId = localStorage.getItem('userId');
-                dispatch(authSuccess(token, userId));
-                dispatch(checkAuthTimeout((expirationDate.getTime() - new Date().getTime()) / 1000));
-            }else{
-                dispatch(logout());
-            }
+            firebase.auth().onAuthStateChanged(function(user) {
+                if (user) {
+                    dispatch(authSuccess(user.uid));
+                } else {
+                    dispatch(logout());
+                }
+            });
         }
     }
 };

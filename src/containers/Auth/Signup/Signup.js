@@ -27,7 +27,6 @@ class Signup extends Component {
 
     createUserHandler = (event) => {
         event.preventDefault();
-        event.preventDefault();
         this.props.onAuth(this.state.user, 'signup');
     };
 
@@ -105,7 +104,7 @@ class Signup extends Component {
                             value={this.state.user.password} />
                     </Form.Field>
                     { this.props.loading ? <Loader /> : '' }
-                    { this.props.isError ? <ResponseMessage color="red" message={this.state.errors[this.props.isError]} /> : '' }
+                    { this.props.isError ? <ResponseMessage color="red" message={this.props.isError} /> : '' }
                     <Button type='submit' primary >Submit</Button>
                     {this.props.isAuth ? <Redirect to="/" /> : ''}
                 </Form>
@@ -117,7 +116,7 @@ class Signup extends Component {
 
 const mapStateToProps = state => {
     return {
-        isAuth: state.authReducer.token !== null,
+        isAuth: state.authReducer.userId !== null,
         loading: state.authReducer.loading,
         isError: state.authReducer.error
     };
