@@ -14,12 +14,18 @@ const NewTasks = (props) => {
         const ref = firebase.firestore().collection('tasks');
         function getTasks() {
             setLoading(true);
+            const userId = localStorage.getItem('userId');
             ref.onSnapshot( (snapshot) => {
                 const items = [];
-                snapshot.forEach((doc) => items.push({
-                    ...doc.data(),
-                    id: doc.id
-                }));
+                snapshot.forEach((doc) => {
+                    if(doc.data().userId === userId){
+                        items.push({
+                            ...doc.data(),
+                            id: doc.id
+                        })
+
+                    }
+                });
                 setTasks(items);
                 setLoading(false);
             });
@@ -31,16 +37,23 @@ const NewTasks = (props) => {
         return <Loader />;
     }
 
+    let allTasks = '';
+    if(tasks.length){
+        allTasks = tasks.map( (fetchedTask) => (
+            <Task
+                {...fetchedTask}
+                key={fetchedTask.id}
+            />
+        ))
+    }else{
+        allTasks = <p>No task found! Try adding one.</p>
+    }
+
 
     return (
         <div>
             <h1>Tasks</h1>
-            {tasks.map( (fetchedTask) => (
-                <Task
-                    {...fetchedTask}
-                    key={fetchedTask.id}
-                />
-            ))}
+            {allTasks}
         </div>
     )
 }

@@ -33,6 +33,7 @@ export const logout = () => {
     return dispatch => {
         firebase.auth().signOut().then(() => {
             localStorage.removeItem('userId');
+            localStorage.removeItem('userName');
             dispatch(logoutUser());
         }, function (error) {
             console.log(' Error logging out ');

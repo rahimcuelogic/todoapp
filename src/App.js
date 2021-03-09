@@ -30,7 +30,7 @@ class App extends Component {
             <Route path="/todos/:id" component={TaskDetails} />
             <Route path="/signin" component={Login} />
             <Route path="/signup" component={Signup} />
-            <Route path="/todos" exact component={Tasks} />
+            <Route path="/todos" exact component={Tasks} rahim={this.props.isAuth} />
             <Route path="/logout" component={Logout} />
             <Route path="/" exact render={ () => <h1>Welcome to "To do app"</h1>} />
           </Switch>
@@ -40,10 +40,16 @@ class App extends Component {
   }
 }
 
+const mapStateToProps = state => {
+  return {
+    isAuth: state.authReducer.userId
+  };
+}
+
 const mapDispatchToProps = dispatch => {
   return {
     onTryAutoSignup: () => dispatch(actions.authCheckState())
   };
 }
  
-export default withRouter(connect(null, mapDispatchToProps)(App));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App));
