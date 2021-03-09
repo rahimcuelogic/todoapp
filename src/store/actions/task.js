@@ -1,5 +1,5 @@
 import * as actionTypes from './actionTypes';
-import axios from '../../axios-tasks';
+// import axios from '../../axios-tasks';
 import * as firestore from '../../firebaseConfig';
 import firebase from 'firebase/app';
 
@@ -90,12 +90,8 @@ export const getTask = (taskId) => {
     return dispatch => {
         console.log(' ----------- get task -----------');
         const taskDetails = async () => {
-            const db = firebase.firestore();
-            const data = await db.collection('tasks').get();
-            // const taskDetail = data.map( doc => {
-            //     console.log(doc.data());
-            //     return doc.data();
-            // })
+        //     const db = firebase.firestore();
+        //     const data = await db.collection('tasks').get();
         }
         taskDetails();
         // firestore.getTasks(taskId);

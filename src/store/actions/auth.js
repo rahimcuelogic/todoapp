@@ -1,7 +1,7 @@
 import * as actionTypes from './actionTypes';
 import axios from 'axios';
 import firebase from 'firebase';
-import * as firestore from '../../firebaseConfig';
+// import * as firestore from '../../firebaseConfig';
 
 export const authStart = () => {
     return {
