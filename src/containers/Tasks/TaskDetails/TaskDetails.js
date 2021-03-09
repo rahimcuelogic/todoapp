@@ -5,8 +5,8 @@ import firebase from '../../../firebaseConfig';
 // import Task from '../Task/Task';
 
 import Loader from '../../../components/UI/Spinner/Spinner';
-import { Form, Input, Button } from 'semantic-ui-react';
-import ResponseMessage from '../../../components/UI/ResponseMessage/ResponseMessage';
+import { Form, Input, Button, Icon, Header, Segment } from 'semantic-ui-react';
+// import ResponseMessage from '../../../components/UI/ResponseMessage/ResponseMessage';
 
 const TaskDetails = (props) => {
     const [task, setTask] = useState([]);
@@ -14,9 +14,9 @@ const TaskDetails = (props) => {
     const [editable, setEditable] = useState(false);
     
     useEffect( () => {
+        const taskId = props.match.params.id;
         const db = firebase.firestore();
         const getTask = async () => {
-            const taskId = props.match.params.id;
             setLoading(true);
             setEditable(false);
             const data = await db.collection('tasks').get()
@@ -44,20 +44,41 @@ const TaskDetails = (props) => {
     }
 
     const updateInputHandler = (event) => {
-        // this.setState({ [event.target.name]: event.target.value });
+        const updatedTask = [];
+        const updatedTaskDetails = {
+            ...task[0],
+            [event.target.name]: event.target.value
+        }
+        updatedTask.push(updatedTaskDetails);
+        setTask(updatedTask);
     };
 
     const submitHandler = (event) => {
+        event.preventDefault();
+        setLoading(true);
 
+        const { title, description, userId } = task[0];
+        const db = firebase.firestore();
+        db.collection("tasks").doc(task[0].id).set({'title': title, 'description': description, 'userId': userId});
+        setTimeout( () => {
+            setLoading(false);
+            props.history.push("/todos");
+        }, 1000);
     };
 
     let currentTask = '';
     if(task.length){
         currentTask = task.map( (fetchedTask) => (
             <div key={fetchedTask.id}>
-                <h1>{fetchedTask.title}</h1>
-                <p>{fetchedTask.description}</p>
-                <button onClick={editHandler}>Edit</button>
+                <Form>
+                    <Form.Field>
+                        <Header as='h2' attached='top'>{fetchedTask.title}</Header>
+                    </Form.Field>
+                    <Form.Field>
+                        <Segment attached>{fetchedTask.description}</Segment>
+                    </Form.Field>
+                    <Button onClick={editHandler} icon >Edit<Icon name='pencil' /></Button>
+                </Form>
             </div>
         ))
     }else{
