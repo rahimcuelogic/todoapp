@@ -22,12 +22,6 @@ const task = (props) => {
                     <Button>Delete</Button>
                 </Header>
             </Segment>
-
-
-
-
-
-
         </Card>
     );
 }

@@ -12,8 +12,63 @@ const config = {
     measurementId: process.env.REACT_APP_MEASUREMENT_ID
   };
 
-firebase.initializeApp(config);
 
-// const db = firebase.firestore();
+if (!firebase.apps.length) {
+  firebase.initializeApp(config);
+}else {
+  firebase.app();
+}
+
+const db = firebase.firestore();
+
+export const addTask = task => {
+    return db.collection("tasks").add(task);
+}
+
+export const getTasks = (userId) => {
+  const ref = db.collection('tasks');
+  const items = [];
+  ref.onSnapshot( (snapshot) => {
+    snapshot.forEach((doc) => {
+        if(doc.data().userId === userId){
+            items.push({
+                ...doc.data(),
+                id: doc.id
+            })
+
+        }
+    });
+  });
+  return items;
+
+}
+
+export const getUser = (userId) => {
+  const ref = db.collection('users');
+  let userdata = {};
+  ref.onSnapshot( (snapshot) => {
+    snapshot.forEach((doc) => {
+        if(doc.data().userId === userId){
+          userdata = doc.data();
+        }
+    });
+  });
+  return userdata;
+
+}
+
+export const getTask = (taskId) => {
+  const ref = db.collection('tasks');
+  let taskDetails = {};
+  ref.onSnapshot( (snapshot) => {
+    snapshot.forEach((doc) => {
+        if(doc.data().id === taskId){
+          taskDetails = doc.data();
+        }
+    });
+  });
+  return taskDetails;
+
+}
 
 export default firebase;

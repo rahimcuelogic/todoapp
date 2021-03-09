@@ -1,51 +1,58 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-// import axios from 'axios';
-import * as actionTypes from '../../../store/actions/index'
+import firebase from '../../../firebaseConfig';
 
-import Aux from '../../../hoc/aux';
+import Task from '../Task/Task';
+
 import Loader from '../../../components/UI/Spinner/Spinner';
 
-
-
-class TaskDetails extends Component {
-    state = {
-        isEdited: false
-    };
-
-    componentDidMount = () => {
-        const taskId = this.props.match.params.id;
-        this.props.onGetTask(this.props.token, taskId);
-    };
-
-    render() {
-        console.log(this.props.taskDetails);
-        let getTaskDetails = <Loader />
-        if(this.props.taskDetails){
-            getTaskDetails = <Aux>
-                <h1>{this.props.taskDetails.title}</h1>
-                <p>{this.props.taskDetails.description}</p>
-            </Aux>
-
+const TaskDetails = (props) => {
+    const [task, setTask] = useState([]);
+    const [loading, setLoading] = useState(false);
+    
+    useEffect( () => {
+        const taskId = props.match.params.id;
+        const db = firebase.firestore();
+        const getTask = async () => {
+            setLoading(true);
+            const data = await db.collection('tasks').get()
+            const taskList = [];
+            data.forEach((doc) => {
+                if(doc.id === taskId){
+                    taskList.push({
+                        ...doc.data(),
+                        id: doc.id
+                    })
+                }
+            });
+            setTask(taskList);
+            setLoading(false);
         }
-        return (
-            <Aux>{getTaskDetails}</Aux>
-        );
+        getTask();
+    }, []);
+    
+    if(loading){
+        return <Loader />;
     }
+
+    let currentTask = '';
+    if(task.length){
+        currentTask = task.map( (fetchedTask) => (
+            <div>
+                <h1>{fetchedTask.title}</h1>
+                <p>{fetchedTask.description}</p>
+            </div>
+        ))
+    }else{
+        currentTask = <p>No task found! Try adding one.</p>
+    }
+
+    return (
+        <div>
+            <h1>Task Details</h1>
+            {currentTask}
+        </div>
+    )
 }
-
-const mapStateToProps = state => {
-    return {
-        userId: state.authReducer.userId,
-        token: state.authReducer.token,
-        taskDetails: state.taskReducer.taskDetails
-    }
-};
-const mapDispatchToProps = dispatch => {
-    return {
-        onGetTask: (token, taskId) => dispatch(actionTypes.getTask(token, taskId))
-    }
-};
-
  
-export default connect(mapStateToProps, mapDispatchToProps)(TaskDetails);
+export default connect()(TaskDetails);

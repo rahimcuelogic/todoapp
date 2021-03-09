@@ -1,54 +1,59 @@
 import * as actionTypes from './actionTypes';
-import firebase from 'firebase';
 import axios from '../../axios-tasks';
+import * as firestore from '../../firebaseConfig';
+import firebase from 'firebase/app';
 
-export const setTasks = (tasks, taskStatus) => {
+export const setTasks = (tasks) => {
     return {
         type: actionTypes.SET_TASKS,
         taskList: tasks,
         loading: false,
-        taskStatus: taskStatus
     };
 };
 
-export const initTasks = (token, userId, taskStatus = '') => {
+export const initTasks = (userId) => {
+    console.log('-------- init task --------- ');
     return dispatch => {
-        axios.get('tasks.json?auth=' + token)
-         .then( (response) => {
-            const allTasks = [];
-            for (let key in response.data){
-                if(userId === response.data[key].userId){
-                    allTasks.push({
-                        ...response.data[key],
-                        id: key
-                    });
-                }
-            }
-            dispatch(setTasks(allTasks, taskStatus));
-        })
-        .catch( (err) => {
-            console.log(err);
-        });
+        // const allTasks = firestore.getTasks(userId);
+        const allTasks = async () => {
+            const db = firebase.firestore();
+            const data = await db.collection('tasks').get();
+            data.map( doc => {
+                // console.log(doc.data());
+                return doc.data();
+            }); 
+        }
+        allTasks();
+        // const allTasks = [
+        //     {
+        //         'title': 'this is a title',
+        //         'description': 'description description description title',
+        //         'userId': 2222,
+        //         'id': 1
+        //     },
+        //     {
+        //         'title': 'this is a title',
+        //         'description': 'description description description title',
+        //         'userId': 2222,
+        //         'id': 2
+        //     },
+        //     {
+        //         'title': 'this is a title',
+        //         'description': 'description description description title',
+        //         'userId': 2222,
+        //         'id': 3
+        //     },
+        // ];
+        if(allTasks){
+            dispatch(setTasks(allTasks));
+        }
     };
 };
 
 export const sendTask = (task) => {
     return dispatch => {
-        const db = firebase.firestore();
-        db.settings({
-            timestampsInSnapshots: true
-        });
-        db.collection("tasks").add(task);
-        /*
-        const createTaskUrl = 'https://react-my-burger-492b4-default-rtdb.firebaseio.com/tasks.json?auth=';
-        axios.post(createTaskUrl, task)
-            .then( (response) => {
-                dispatch(initTasks('', task.userId, 'added'));
-            })
-            .catch( (err) => {
-                console.log(err);
-        });
-        */
+        firestore.addTask(task);
+        dispatch(initTasks(task.userId));
     };
 }
 
@@ -81,24 +86,27 @@ export const setTaskDetails = (taskDetails) => {
     }
 };
 
-export const getTask = (token, taskId) => {
+export const getTask = (taskId) => {
     return dispatch => {
-        axios.get('tasks.json?auth=' + token)
-        .then( (response) => {
+        console.log(' ----------- get task -----------');
+        const taskDetails = async () => {
+            const db = firebase.firestore();
+            const data = await db.collection('tasks').get();
+            // const taskDetail = data.map( doc => {
+            //     console.log(doc.data());
+            //     return doc.data();
+            // })
+        }
+        taskDetails();
+        // firestore.getTasks(taskId);
+        // console.log(taskDetails);
+        // axios.get('tasks.json?auth=' + token)
+        // .then( (response) => {
+        //     dispatch(setTaskDetails(taskDetails[0]));
+        // })
+        // .catch( (err) => {
+        //     console.log(err);
+        // });
 
-            const taskDetails = [];
-            for (let key in response.data){
-                if(taskId === key){
-                    taskDetails.push({
-                        ...response.data[key],
-                        id: key
-                    });
-                }
-            }
-            dispatch(setTaskDetails(taskDetails[0]));
-        })
-        .catch( (err) => {
-            console.log(err);
-        });
     };
 };

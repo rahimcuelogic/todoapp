@@ -8,19 +8,11 @@ import Loader from '../../components/UI/Spinner/Spinner';
 
 
 class Tasks extends Component {
-    state = {
-        fetchedTasks: [],
-        loading: false
-    };
-
     componentDidMount = () => {
-        if(!this.props.token){
+        if(!this.props.userId){
             this.props.onCheckToken();
         }else{
-            if(true){
-                this.props.onInitTasks(this.props.token, this.props.userId);
-                this.setState({ loading: true });
-            }
+            this.props.onInitTasks(this.props.userId);
         }
     };
 
@@ -34,22 +26,20 @@ class Tasks extends Component {
 
     render() {
         let authRedirect = null;
+        const { taskList } = this.props;
 
         let allTasks = <Loader />
-        if(this.props.token === null){
+        if(this.props.userId === null){
             authRedirect = <Redirect to="/" />
+        }else if(taskList.length){
+            allTasks = taskList.map(fetchedTask => (
+                <Task
+                    {...fetchedTask}
+                    key={fetchedTask.id}
+                />
+            ));
         }else{
-            if(this.props.taskList.length){
-                allTasks = this.props.taskList.map(fetchedTask => (
-                    <Task
-                        {...fetchedTask}
-                        key={fetchedTask.id}
-                    />
-    
-                ));
-            }else{
-                allTasks = <p>No task found! Try adding one.</p>
-            }
+            allTasks = <p>No task found! Try adding one.</p>
         }
         return (
             <div>
@@ -64,15 +54,14 @@ class Tasks extends Component {
 
 const mapStateToProps = state => {
     return {
-        taskList: state.taskReducer.taskList,
         userId: state.authReducer.userId,
-        token: state.authReducer.token
+        taskList: state.taskReducer.taskList
     }
 };
 const mapDispatchToProps = dispatch => {
     return {
-        onInitTasks: (token, userId) => dispatch(actionTypes.initTasks(token, userId)),
-        onCheckToken: () => dispatch(actionTypes.authCheckState())
+        onCheckToken: () => dispatch(actionTypes.authCheckState()),
+        onInitTasks: (userId) => dispatch(actionTypes.initTasks(userId)),
     }
 };
  

@@ -1,6 +1,7 @@
 import * as actionTypes from './actionTypes';
 import axios from 'axios';
 import firebase from 'firebase';
+import * as firestore from '../../firebaseConfig';
 
 export const authStart = () => {
     return {
@@ -62,8 +63,9 @@ export const authLogin = userdata => {
     return dispatch => {
         firebase.auth().signInWithEmailAndPassword(userdata.email, userdata.password)
             .then((userCredential) => {
-                console.log(userCredential);
                 localStorage.setItem('userId', userCredential.user.uid);
+                // const userDetails = firestore.getUser(userCredential.user.uid);
+                localStorage.setItem('userName', 'Hardcoded name');
                 dispatch(authSuccess(userCredential.user.uid));
             })
             .catch((error) => {
