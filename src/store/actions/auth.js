@@ -81,7 +81,7 @@ export const authSignup = userdata => {
                     firstName: userdata.firstName,
                     lastName: userdata.lastName,
                 };
-                const userRef = db.collection("users").add(userDetails);
+                db.collection("users").add(userDetails);
                 dispatch(authSuccess(userCredential.user.uid, userdata.firstName));
                 localStorage.setItem('userId', userCredential.user.uid);
                 localStorage.setItem('userName', userdata.firstName);

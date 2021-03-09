@@ -38,7 +38,7 @@ export const sendTask = (task) => {
         db.settings({
             timestampsInSnapshots: true
         });
-        const userRef = db.collection("tasks").add();
+        db.collection("tasks").add(task);
         /*
         const createTaskUrl = 'https://react-my-burger-492b4-default-rtdb.firebaseio.com/tasks.json?auth=';
         axios.post(createTaskUrl, task)
