@@ -1,5 +1,4 @@
 import * as actionTypes from './actionTypes';
-// import axios from '../../axios-tasks';
 import * as firestore from '../../firebaseConfig';
 import firebase from 'firebase/app';
 
@@ -72,21 +71,8 @@ export const setTaskDetails = (taskDetails) => {
 
 export const getTask = (taskId) => {
     return dispatch => {
-        console.log(' ----------- get task -----------');
         const taskDetails = async () => {
-        //     const db = firebase.firestore();
-        //     const data = await db.collection('tasks').get();
         }
         taskDetails();
-        // firestore.getTasks(taskId);
-        // console.log(taskDetails);
-        // axios.get('tasks.json?auth=' + token)
-        // .then( (response) => {
-        //     dispatch(setTaskDetails(taskDetails[0]));
-        // })
-        // .catch( (err) => {
-        //     console.log(err);
-        // });
-
     };
 };

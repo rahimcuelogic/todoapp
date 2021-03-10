@@ -3,11 +3,8 @@ import { connect } from 'react-redux';
 import { useHistory } from 'react-router';
 import firebase from '../../../firebaseConfig';
 
-// import Task from '../Task/Task';
-
 import Loader from '../../../components/UI/Spinner/Spinner';
 import { Form, Input, Button, Icon, Header, Segment } from 'semantic-ui-react';
-// import ResponseMessage from '../../../components/UI/ResponseMessage/ResponseMessage';
 
 const TaskDetails = (props) => {
     const [task, setTask] = useState([]);
@@ -116,8 +113,6 @@ const TaskDetails = (props) => {
                             onChange={updateInputHandler} 
                             value={task[0].description} />
                     </Form.Field>
-                    {/* { this.props.loading ? <Loader /> : '' } */}
-                    {/* { this.props.isError ? <ResponseMessage color="red" message={this.props.isError} /> : '' } */}
                     <Button type='submit' primary >Submit</Button>
                 </Form>
             </div>

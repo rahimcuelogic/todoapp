@@ -2,21 +2,17 @@ import React, { Component } from 'react';
 import { Route, Switch, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-// import logo from './logo.svg';
 import './App.css';
 import './assets/semantic/semantic.min.css';
-// import { Header, Button, Divider } from 'semantic-ui-react';
 
 import * as actions from './store/actions';
 
 import asyncComponent from './hoc/asyncComponent/asyncComponent';
 import Layout from './components/Layout/Layout';
-// import TaskBuilder from ;
 import Tasks from './containers/Tasks/NewTasks';
 import Login from './containers/Auth/Login/Login';
 import Signup from './containers/Auth/Signup/Signup';
 import Logout from './containers/Auth/Logout/Logout';
-// import TaskDetails from ;
 
 const asyncTaskBuilder = asyncComponent(() => {
   return import('./containers/Tasks/TaskBuilder/TaskBuilder');

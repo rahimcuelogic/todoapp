@@ -6,14 +6,12 @@ import Toolbar from '../Navigation/Toolbar/Toolbar';
 import { Container } from 'semantic-ui-react';
 
 class Layout extends Component {
-    state = {  }
     render() { 
         return (
             <Container>
                 <div>
                     <Toolbar
                         isAuth={this.props.isAuthenticated} />
-                    {/* SideDrawer, Backdrop */}
                 </div>
                 <main>
                     {this.props.children}

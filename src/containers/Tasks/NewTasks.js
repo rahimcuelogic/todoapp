@@ -18,7 +18,6 @@ const NewTasks = (props) => {
     }
 
     const deleteTask = (taskId) => {
-        // const db = firebase.firestore();
         db.collection("tasks").doc(taskId).delete().then( response => {
             getTasks();
         });
