@@ -27,6 +27,7 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 taskList: action.taskList,
                 loading: action.loading,
+                taskStatus: action.taskStatus
             };
         case actionTypes.FETCH_TASKS:
             return {

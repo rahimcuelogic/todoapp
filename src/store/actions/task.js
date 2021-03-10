@@ -8,45 +8,29 @@ export const setTasks = (tasks) => {
         type: actionTypes.SET_TASKS,
         taskList: tasks,
         loading: false,
+        taskStatus: 'added'
     };
 };
 
 export const initTasks = (userId) => {
-    console.log('-------- init task --------- ');
     return dispatch => {
-        // const allTasks = firestore.getTasks(userId);
         const allTasks = async () => {
             const db = firebase.firestore();
-            const data = await db.collection('tasks').get();
-            data.map( doc => {
-                // console.log(doc.data());
-                return doc.data();
-            }); 
+            db.collection('tasks').get().then((snapshot) => {
+                const allTasks = [];
+                snapshot.docs.forEach(doc => {
+                    let items = doc.data();
+                    if(items.userId === userId){
+                        allTasks.push({
+                            ...items,
+                            id: doc.id
+                        });
+                    }
+                });
+                dispatch(setTasks(allTasks));
+            });
         }
         allTasks();
-        // const allTasks = [
-        //     {
-        //         'title': 'this is a title',
-        //         'description': 'description description description title',
-        //         'userId': 2222,
-        //         'id': 1
-        //     },
-        //     {
-        //         'title': 'this is a title',
-        //         'description': 'description description description title',
-        //         'userId': 2222,
-        //         'id': 2
-        //     },
-        //     {
-        //         'title': 'this is a title',
-        //         'description': 'description description description title',
-        //         'userId': 2222,
-        //         'id': 3
-        //     },
-        // ];
-        if(allTasks){
-            dispatch(setTasks(allTasks));
-        }
     };
 };
 

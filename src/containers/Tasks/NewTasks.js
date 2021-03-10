@@ -17,24 +17,31 @@ const NewTasks = (props) => {
         history.push("/signin");
     }
 
+    const deleteTask = (taskId) => {
+        // const db = firebase.firestore();
+        db.collection("tasks").doc(taskId).delete().then( response => {
+            getTasks();
+        });
+    };
+
+    const db = firebase.firestore();
+    const getTasks = async () => {
+        setLoading(true);
+        const data = await db.collection('tasks').get()
+        const taskList = [];
+        data.forEach((doc) => {
+            if(doc.data().userId === userId){
+                taskList.push({
+                    ...doc.data(),
+                    id: doc.id
+                })
+            }
+        });
+        setTasks(taskList);
+        setLoading(false);
+    };
+
     useEffect( () => {
-        const userId = localStorage.getItem('userId');
-        const db = firebase.firestore();
-        const getTasks = async () => {
-            setLoading(true);
-            const data = await db.collection('tasks').get()
-            const taskList = [];
-            data.forEach((doc) => {
-                if(doc.data().userId === userId){
-                    taskList.push({
-                        ...doc.data(),
-                        id: doc.id
-                    })
-                }
-            });
-            setTasks(taskList);
-            setLoading(false);
-        }
         getTasks();
     }, []);
     
@@ -48,6 +55,7 @@ const NewTasks = (props) => {
             <Task
                 {...fetchedTask}
                 key={fetchedTask.id}
+                onDelete={deleteTask}
             />
         ))
     }else{
