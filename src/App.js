@@ -9,13 +9,22 @@ import './assets/semantic/semantic.min.css';
 
 import * as actions from './store/actions';
 
+import asyncComponent from './hoc/asyncComponent/asyncComponent';
 import Layout from './components/Layout/Layout';
-import TaskBuilder from './containers/Tasks/TaskBuilder/TaskBuilder';
+// import TaskBuilder from ;
 import Tasks from './containers/Tasks/NewTasks';
 import Login from './containers/Auth/Login/Login';
 import Signup from './containers/Auth/Signup/Signup';
 import Logout from './containers/Auth/Logout/Logout';
-import TaskDetails from './containers/Tasks/TaskDetails/TaskDetails';
+// import TaskDetails from ;
+
+const asyncTaskBuilder = asyncComponent(() => {
+  return import('./containers/Tasks/TaskBuilder/TaskBuilder');
+});
+
+const asyncTaskDetails = asyncComponent(() => {
+  return import('./containers/Tasks/TaskDetails/TaskDetails');
+});
 
 class App extends Component {
   componentDidMount = () => {
@@ -26,8 +35,8 @@ class App extends Component {
       <div>
         <Layout>
           <Switch>
-            <Route path="/todos/create" component={TaskBuilder} />
-            <Route path="/todos/:id" component={TaskDetails} />
+            <Route path="/todos/create" component={asyncTaskBuilder} />
+            <Route path="/todos/:id" component={asyncTaskDetails} />
             <Route path="/signin" component={Login} />
             <Route path="/signup" component={Signup} />
             <Route path="/todos" exact render={() => <Tasks isAuth={this.props.isAuth} />} />
