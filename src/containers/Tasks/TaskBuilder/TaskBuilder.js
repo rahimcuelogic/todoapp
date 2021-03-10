@@ -3,9 +3,6 @@ import { connect } from 'react-redux';
 import * as actionTypes from '../../../store/actions/index';
 import { Redirect } from 'react-router-dom';
 
-
-import Aux from '../../../hoc/aux';
-
 import { Form, Input, Button } from 'semantic-ui-react';
 import Loader from '../../../components/UI/Spinner/Spinner';
 
@@ -48,7 +45,7 @@ class TaskBuilder extends Component {
             authRedirect = <Redirect to="/todos/" />
         }
         return (
-          <Aux>
+          <>
             {authRedirect}
             <h1>Create new task</h1>
             <Form onSubmit={this.createTaskHandler}>
@@ -76,7 +73,7 @@ class TaskBuilder extends Component {
                 <Button type='submit' primary >Submit</Button>
             </Form>
             {taskStatus}
-          </Aux>  
+          </>  
         );
     }
 }

@@ -6,7 +6,6 @@ import * as actions from '../../../store/actions/index'
 
 import { Form, Input, Button } from 'semantic-ui-react';
 
-import Aux from '../../../hoc/aux';
 import Loader from '../../../components/UI/Spinner/Spinner';
 import ResponseMessage from '../../../components/UI/ResponseMessage/ResponseMessage';
 
@@ -39,7 +38,7 @@ class Signup extends Component {
 
     render() { 
         return (
-            <Aux>
+            <>
                 <h1>Signup to start using service.</h1>
                 <Form onSubmit={this.createUserHandler}>
                     <Form.Field>
@@ -87,7 +86,7 @@ class Signup extends Component {
                     <Button type='submit' primary >Submit</Button>
                     {this.props.isAuth ? <Redirect to="/" /> : ''}
                 </Form>
-            </Aux>
+            </>
         );
     }
 }

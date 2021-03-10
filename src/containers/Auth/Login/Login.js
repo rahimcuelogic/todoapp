@@ -5,7 +5,6 @@ import { Redirect } from 'react-router-dom';
 import * as actions from '../../../store/actions/index'
 
 import { Form, Input, Button } from 'semantic-ui-react';
-import Aux from '../../../hoc/aux';
 import Loader from '../../../components/UI/Spinner/Spinner';
 import ResponseMessage from '../../../components/UI/ResponseMessage/ResponseMessage';
 
@@ -29,7 +28,7 @@ class Login extends Component {
 
     render() {
         return (
-            <Aux>
+            <>
                 { this.props.isAuth ? <Redirect to="/" /> : '' }
                 <h1>Login to continue</h1>
                 <Form onSubmit={this.submitHandler}>
@@ -57,7 +56,7 @@ class Login extends Component {
                     { this.props.isError && this.state.errors ? <ResponseMessage color="red" message={this.props.isError} /> : '' }
                     <Button type='submit' primary >Submit</Button>
                 </Form>
-            </Aux>
+            </>
         );
     }
 }
