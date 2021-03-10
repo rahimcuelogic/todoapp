@@ -46,8 +46,9 @@ export const resetErrors = () => {
     return dispatch => {
         return {
             type: actionTypes.ERROR_RESET,
-
+            error: false
         }
+
     }
 };
 
@@ -64,13 +65,30 @@ export const authLogin = userdata => {
         firebase.auth().signInWithEmailAndPassword(userdata.email, userdata.password)
             .then((userCredential) => {
                 localStorage.setItem('userId', userCredential.user.uid);
-                // const userDetails = firestore.getUser(userCredential.user.uid);
-                localStorage.setItem('userName', 'Hardcoded name');
-                dispatch(authSuccess(userCredential.user.uid));
+                dispatch(setUserName(userCredential.user.uid));
             })
             .catch((error) => {
                 dispatch(authFail(error.message));
             });
+    }
+}
+
+export const setUserName = (userId) => {
+    return dispatch => {
+        console.log('setUserName');
+        const db = firebase.firestore();
+        const userDetails = db.collection("users").get().then( response => {
+            response.forEach((doc) => {
+                const userDetails = doc.data();
+                if(userDetails.userId === userId){
+                    localStorage.setItem('userName', doc.data().firstName);
+                }
+            });
+            dispatch(authSuccess(userId));
+        })
+        .catch( (error) => {
+            console.log(error);
+        });
     }
 }
 

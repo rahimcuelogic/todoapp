@@ -37,6 +37,7 @@ const authLogout = (state, action) => {
 }
 
 const errorReset = (state, action) => {
+    console.log('inh');
     return updateObject (state, { error: null });
 }
 

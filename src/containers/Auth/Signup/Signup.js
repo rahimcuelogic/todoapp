@@ -20,14 +20,13 @@ class Signup extends Component {
             firstName: '',
             lastName: ''
         },
-        errors: {
-            'EMAIL_EXISTS': 'This email is taken, please try with another email.',
-        }
+        errors: ''
     }
 
     createUserHandler = (event) => {
         event.preventDefault();
         this.props.onAuth(this.state.user, 'signup');
+        this.setState({ errors: 'pending' });
     };
 
     updateInputHandler = (event) => {
@@ -84,7 +83,7 @@ class Signup extends Component {
                             value={this.state.user.password} />
                     </Form.Field>
                     { this.props.loading ? <Loader /> : '' }
-                    { this.props.isError ? <ResponseMessage color="red" message={this.props.isError} /> : '' }
+                    { this.props.isError && this.state.errors ? <ResponseMessage color="red" message={this.props.isError} /> : '' }
                     <Button type='submit' primary >Submit</Button>
                     {this.props.isAuth ? <Redirect to="/" /> : ''}
                 </Form>

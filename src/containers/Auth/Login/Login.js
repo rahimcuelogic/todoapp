@@ -14,28 +14,13 @@ class Login extends Component {
     state = {
         email: '',
         password: '',
-        errors: {
-            'INVALID_PASSWORD': 'Please enter correct password.',
-            'EMAIL_NOT_FOUND' : 'Credentials do not match.'
-        }
-    }
-
-    componentDidMount = () => {
-        // console.log(' ------------- did mount -------------');
-        // console.log(this.props.responseMessage);
-        // console.log(' ------------- did mount -------------');
-    }
-
-    componentDidUpdate = () => {
-        // console.log(' ------------- UPDATE -------------');
-        // console.log(this.props.responseMessage);
-        // console.log(' ------------- UPDATE -------------');
+        errors: ''
     }
 
     submitHandler = (event) => {
         event.preventDefault();
         this.props.onAuth(this.state, 'login');
-
+        this.setState({ errors: 'pending' });
     };
 
     updateInputHandler = (event) => {
@@ -69,7 +54,7 @@ class Login extends Component {
                             value={this.state.password} />
                     </Form.Field>
                     { this.props.loading ? <Loader /> : '' }
-                    { this.props.isError ? <ResponseMessage color="red" message={this.props.isError} /> : '' }
+                    { this.props.isError && this.state.errors ? <ResponseMessage color="red" message={this.props.isError} /> : '' }
                     <Button type='submit' primary >Submit</Button>
                 </Form>
             </Aux>
@@ -87,7 +72,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        onAuth: (userdata, type) => dispatch(actions.auth(userdata, type))
+        onAuth: (userdata, type) => dispatch(actions.auth(userdata, type)),
+        onResetError: () => dispatch(actions.resetErrors())
     };
 };
  

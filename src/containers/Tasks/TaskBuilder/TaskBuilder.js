@@ -58,6 +58,7 @@ class TaskBuilder extends Component {
                         placeholder='Add title' 
                         type="text" 
                         name="title"
+                        required
                         onChange={this.updateInputHandler} 
                         value={this.state.task.title} />
                 </Form.Field>
@@ -67,6 +68,7 @@ class TaskBuilder extends Component {
                         placeholder='Add Description' 
                         type="text"
                         name="description"
+                        required
                         onChange={this.updateInputHandler   } 
                         value={this.state.task.description} />
                 </Form.Field>

@@ -7,5 +7,6 @@ export {
 export {
     auth,
     logout,
-    authCheckState
+    authCheckState,
+    resetErrors
 } from './auth';
