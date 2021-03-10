@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
+import { useHistory } from 'react-router';
 import firebase from '../../../firebaseConfig';
 
 // import Task from '../Task/Task';
@@ -12,6 +13,12 @@ const TaskDetails = (props) => {
     const [task, setTask] = useState([]);
     const [loading, setLoading] = useState(false);
     const [editable, setEditable] = useState(false);
+    const history = useHistory();
+
+    const userId = localStorage.getItem('userId');
+    if(!props.isAuth && !userId){
+        history.push("/signin");
+    }
     
     useEffect( () => {
         const taskId = props.match.params.id;

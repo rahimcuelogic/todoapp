@@ -30,7 +30,7 @@ class App extends Component {
             <Route path="/todos/:id" component={TaskDetails} />
             <Route path="/signin" component={Login} />
             <Route path="/signup" component={Signup} />
-            <Route path="/todos" exact component={Tasks} rahim={this.props.isAuth} />
+            <Route path="/todos" exact render={() => <Tasks isAuth={this.props.isAuth} />} />
             <Route path="/logout" component={Logout} />
             <Route path="/" exact render={ () => <h1>Welcome to "To do app"</h1>} />
           </Switch>

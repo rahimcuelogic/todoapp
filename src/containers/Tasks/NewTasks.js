@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useHistory } from 'react-router';
 import { connect } from 'react-redux';
 import firebase from '../../firebaseConfig';
 
@@ -9,7 +10,13 @@ import Loader from '../../components/UI/Spinner/Spinner';
 const NewTasks = (props) => {
     const [tasks, setTasks] = useState([]);
     const [loading, setLoading] = useState(false);
-    
+    const history = useHistory();
+
+    const userId = localStorage.getItem('userId');
+    if(!props.isAuth && !userId){
+        history.push("/signin");
+    }
+
     useEffect( () => {
         const userId = localStorage.getItem('userId');
         const db = firebase.firestore();

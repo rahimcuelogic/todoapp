@@ -39,7 +39,8 @@ class TaskBuilder extends Component {
         let taskStatus = '';
 
         let authRedirect = null;
-        if(this.props.token === null){
+        const userId = localStorage.getItem('userId');
+        if(!userId){
             authRedirect = <Redirect to="/" />
         }
 
@@ -84,7 +85,6 @@ const mapStateToProps = state => {
         error: state.authReducer.error,
         loading: state.taskReducer.loading,
         taskStatus: state.taskReducer.taskStatus,
-        token: state.authReducer.userId,
         userId: state.authReducer.userId,
     }
 };
