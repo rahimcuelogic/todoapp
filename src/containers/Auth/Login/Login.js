@@ -13,8 +13,6 @@ import ResponseMessage from '../../../components/UI/ResponseMessage/ResponseMess
 class Login extends Component {
     state = {
         errors: '',
-        email: '',
-        password: '',
         loginForm: {
             email: {
                 elementConfig: {
