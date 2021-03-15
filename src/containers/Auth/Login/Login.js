@@ -4,7 +4,7 @@ import { Redirect } from 'react-router-dom';
 
 import * as actions from '../../../store/actions/index'
 
-import { Form, Input, Button } from 'semantic-ui-react';
+import { Form, Button } from 'semantic-ui-react';
 import InputComponent from '../../../components/UI/Input/Input';
 import Loader from '../../../components/UI/Spinner/Spinner';
 import ResponseMessage from '../../../components/UI/ResponseMessage/ResponseMessage';

@@ -6,7 +6,7 @@ import { Redirect } from 'react-router-dom';
 import { Form, Input, Button } from 'semantic-ui-react';
 import Loader from '../../../components/UI/Spinner/Spinner';
 
-// import InputComponent from '../../../components/UI/Input/Input';
+import InputComponent from '../../../components/UI/Input/Input';
 
 
 class TaskBuilder extends Component {
@@ -15,25 +15,84 @@ class TaskBuilder extends Component {
             title: '',
             description: ''
         },
+        taskForm: {
+            title: {
+                elementConfig: {
+                    type: 'text',
+                    label: 'Title',
+                    placeholder: 'Enter Title',
+                    required: true
+                },
+                value: '',
+                valid: false,
+                validation: {
+                    required: true,
+                }
+            },
+            description: {
+                elementConfig: {
+                    type: 'text',
+                    label: 'Description',
+                    placeholder: 'Enter Description',
+                    required: true
+                },
+                value: '',
+                valid: false,
+                validation: {
+                    required: true,
+                }
+            },
+        },
+        formIsValid: false,
     };
 
     createTaskHandler = () => {
-        const task = {
-            ...this.state.task,
-            userId: this.props.userId
+        const formData = {};
+        formData['userId'] = this.props.userId;
+        for (let formElementIdentifier in this.state.taskForm){
+            formData[formElementIdentifier] = this.state.taskForm[formElementIdentifier].value;
         }
 
-        this.props.onAddTasks(task);
+        this.props.onAddTasks(formData);
         this.props.history.push('/todos');
     };
 
-    updateInputHandler = (event) => {
-        const updatedTask = {
-            ...this.state.task,
-            [event.target.name]: event.target.value
-        };
-        this.setState({ task: updatedTask });
-    };
+    checkValidity(value, rules){
+        let isValid = true;
+        if(rules.required){
+            isValid = value.trim() !== '' && isValid;
+        }
+
+        if(rules.minLength){
+            isValid = value.length >= rules.minLength && isValid;
+        }
+
+        if(rules.maxLength){
+            isValid = value.length <= rules.maxLength && isValid;
+        }
+
+        return isValid;
+    }
+
+    inputChangedHandler = (e, inputIdentifier) => {
+        const updatedTaskForm = {
+            ...this.state.taskForm
+        }
+        const updatedFormElement = {
+            ...updatedTaskForm[inputIdentifier]
+        }
+
+        updatedFormElement.value = e.target.value;
+        updatedFormElement.valid = this.checkValidity(updatedFormElement.value, updatedFormElement.validation);
+        updatedTaskForm[inputIdentifier] = updatedFormElement;
+
+        let formIsValid = true;
+        for(let inputIdentifier in updatedTaskForm){
+            formIsValid = updatedTaskForm[inputIdentifier].valid && formIsValid;
+        }
+
+        this.setState({ taskForm: updatedTaskForm, formIsValid: formIsValid });
+    }
 
     render() {
         let taskStatus = '';
@@ -47,38 +106,36 @@ class TaskBuilder extends Component {
         if(this.props.taskStatus === 'added' && !this.props.loading){
             // authRedirect = <Redirect to="/todos/" />
         }
+
+        const formElementsArray = [];
+        for (let key in this.state.taskForm){
+            formElementsArray.push({
+                id: key,
+                config: this.state.taskForm[key]
+            });
+        }
+
+        let taskForm = (
+            <Form onSubmit={this.createTaskHandler}>
+                {formElementsArray.map( formElement => (
+                    <Form.Field key={formElement.id}>
+                        <InputComponent 
+                            elementConfig={formElement.config.elementConfig}
+                            changed={(event) => this.inputChangedHandler(event, formElement.id)}
+                            value={formElement.config.value}
+                            error={!formElement.config.valid}
+                             />
+                    </Form.Field>
+                ))}
+                <Button type='submit' primary disabled={!this.state.formIsValid} >Submit </Button>
+                { this.props.loading ? <Loader /> : '' }
+            </Form>
+        );
         return (
           <>
             {authRedirect}
             <h1>Create new task</h1>
-            <Form onSubmit={this.createTaskHandler}>
-                <Form.Field>
-                    <Input 
-                        label="Title" 
-                        placeholder='Add title' 
-                        type="text" 
-                        name="title"
-                        required
-                        onChange={this.updateInputHandler} 
-                        value={this.state.task.title} />
-                </Form.Field>
-                <Form.Field>
-                    <Input 
-                        label="Description" 
-                        placeholder='Add Description' 
-                        type="text"
-                        name="description"
-                        required
-                        onChange={this.updateInputHandler   } 
-                        value={this.state.task.description} />
-                </Form.Field>
-                {/* <Form.Field>
-                    <InputComponent label="test" />
-                </Form.Field> */}
-                { this.props.loading ? <Loader /> : '' }
-                <Button type='submit' primary >Submit</Button>
-                <br/>
-            </Form>
+            {taskForm}
             {taskStatus}
           </>  
         );
