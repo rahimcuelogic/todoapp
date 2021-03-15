@@ -75,7 +75,7 @@ export const authLogin = userdata => {
 export const setUserName = (userId) => {
     return dispatch => {
         const db = firebase.firestore();
-        const userDetails = db.collection("users").get().then( response => {
+        db.collection("users").get().then( response => {
             response.forEach((doc) => {
                 const userDetails = doc.data();
                 if(userDetails.userId === userId){

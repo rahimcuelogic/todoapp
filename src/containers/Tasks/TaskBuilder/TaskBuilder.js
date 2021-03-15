@@ -6,6 +6,8 @@ import { Redirect } from 'react-router-dom';
 import { Form, Input, Button } from 'semantic-ui-react';
 import Loader from '../../../components/UI/Spinner/Spinner';
 
+// import InputComponent from '../../../components/UI/Input/Input';
+
 
 class TaskBuilder extends Component {
     state = {
@@ -22,6 +24,7 @@ class TaskBuilder extends Component {
         }
 
         this.props.onAddTasks(task);
+        this.props.history.push('/todos');
     };
 
     updateInputHandler = (event) => {
@@ -42,7 +45,7 @@ class TaskBuilder extends Component {
         }
 
         if(this.props.taskStatus === 'added' && !this.props.loading){
-            authRedirect = <Redirect to="/todos/" />
+            // authRedirect = <Redirect to="/todos/" />
         }
         return (
           <>
@@ -69,8 +72,12 @@ class TaskBuilder extends Component {
                         onChange={this.updateInputHandler   } 
                         value={this.state.task.description} />
                 </Form.Field>
+                {/* <Form.Field>
+                    <InputComponent label="test" />
+                </Form.Field> */}
                 { this.props.loading ? <Loader /> : '' }
                 <Button type='submit' primary >Submit</Button>
+                <br/>
             </Form>
             {taskStatus}
           </>  
