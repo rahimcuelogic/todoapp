@@ -21,20 +21,31 @@ class Login extends Component {
                     type: 'email',
                     label: 'Email',
                     placeholder: 'Enter Email',
-
+                    required: true
                 },
-                value: ''
+                value: '',
+                valid: false,
+                validation: {
+                    required: true,
+                }
             },
             password: {
                 elementConfig: {
                     type: 'password',
                     label: 'Password',
                     placeholder: 'Enter Password',
-
+                    required: true
                 },
-                value: ''
+                value: '',
+                valid: false,
+                validation: {
+                    required: true,
+                    minLength: 6,
+                    maxLength: 10
+                }
             },
-        }
+        },
+        formIsValid: false,
     }
 
     submitHandler = (event) => {
@@ -47,6 +58,23 @@ class Login extends Component {
         this.setState({ errors: 'pending' });
     };
 
+    checkValidity(value, rules){
+        let isValid = true;
+        if(rules.required){
+            isValid = value.trim() !== '' && isValid;
+        }
+
+        if(rules.minLength){
+            isValid = value.length >= rules.minLength && isValid;
+        }
+
+        if(rules.maxLength){
+            isValid = value.length <= rules.maxLength && isValid;
+        }
+
+        return isValid;
+    }
+
     inputChangedHandler = (e, inputIdentifier) => {
         const updatedLoginForm = {
             ...this.state.loginForm
@@ -56,8 +84,15 @@ class Login extends Component {
         }
 
         updatedFormElement.value = e.target.value;
+        updatedFormElement.valid = this.checkValidity(updatedFormElement.value, updatedFormElement.validation);
         updatedLoginForm[inputIdentifier] = updatedFormElement;
-        this.setState({ loginForm: updatedLoginForm });
+
+        let formIsValid = true;
+        for(let inputIdentifier in updatedLoginForm){
+            formIsValid = updatedLoginForm[inputIdentifier].valid && formIsValid;
+        }
+
+        this.setState({ loginForm: updatedLoginForm, formIsValid: formIsValid });
     }
 
     render() {
@@ -77,12 +112,13 @@ class Login extends Component {
                             elementConfig={formElement.config.elementConfig}
                             changed={(event) => this.inputChangedHandler(event, formElement.id)}
                             value={formElement.config.value}
+                            error={!formElement.config.valid}
                              />
                     </Form.Field>
                 ))}
                 { this.props.loading ? <Loader /> : '' }
                 { this.props.isError && this.state.errors ? <ResponseMessage color="red" message={this.props.isError} /> : '' }
-                <Button type='submit' primary >Submit</Button>
+                <Button type='submit' primary disabled={!this.state.formIsValid} >Submit </Button>
             </Form>
         );
 
